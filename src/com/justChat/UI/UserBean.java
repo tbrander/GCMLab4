@@ -68,4 +68,9 @@ public class UserBean  implements Serializable{
 		  return "";
 		 }
 
+	public String getGmail() {
+		// TODO Auto-generated method stub
+		return mail;
+	}
+
 }
