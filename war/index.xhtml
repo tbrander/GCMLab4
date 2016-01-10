@@ -25,15 +25,14 @@
 <p:toolbar>
  <f:facet name="right">
    		<h:form>
-   			<p:commandButton value="Friends" action="#{userBean.friends}"	ajax="false" style="margin-right:20px;" />
-	        <p:commandButton value="Messages" action="#{userBean.friends}"	ajax="false" style="margin-right:20px;" />
-			
+   			<p:commandButton value="Friends" action="#{userBean.friends}"	ajax="false" icon="ui-icon ui-icon-person" style="margin-right:20px;" />
+			<p:commandButton value="Add new friend" action="#{userBean.addFriendX}" ajax="false" icon="ui-icon ui-icon-plusthick" style="margin-right:20px;" />
     	</h:form>
  </f:facet>
  
  <f:facet name="left">
    		<h:form>
-	        <p:commandButton value="Home" action="#{userBean.home}" ajax="false" style="margin-right:20px;" />
+	        <p:commandButton value="Home" action="#{userBean.home}" ajax="false" icon="ui-icon ui-icon-home" style="margin-right:20px;" />
     	</h:form>
  </f:facet>
 </p:toolbar>

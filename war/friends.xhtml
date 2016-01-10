@@ -14,23 +14,47 @@
 
 <body>
 <p:toolbar>
+
  <f:facet name="right">
    		<h:form>
-	        <p:commandButton value="Messages" action="#{friendBean.friends}"	ajax="false" style="margin-right:20px;" />
+			<p:commandButton value="Add new friend" action="#{userBean.addFriendX}" ajax="false" icon="ui-icon ui-icon-plusthick" style="margin-right:20px;" />
     	</h:form>
  </f:facet>
- 
  <f:facet name="left">
    		<h:form>
-	        <p:commandButton value="Home" action="#{friendBean.home}" ajax="false" style="margin-right:20px;" />
+	        <p:commandButton value="Home" action="#{friendBean.home}" ajax="false" icon="ui-icon ui-icon-home" style="margin-right:20px;" />
+    		
     	</h:form>
  </f:facet>
 </p:toolbar>
 
 
  
-MAIL: #{friendBean.mail}
-
+		<h:form>
+		
+		
+		<p:panel header="Friends">
+			<p:dataTable value="#{friendBean.friendList}" var="friend" 
+				border="1" cellspacing="5" width="700"
+				style=" border: 2px solid rgb(129,186,233); background-color: rgb(237,237,237);text-align:center;">
+				<p:column>
+					<f:facet name="header">Name</f:facet>    				
+     				 #{friend}
+   				</p:column>
+				
+				<p:column>
+					<f:facet name="header"></f:facet>
+				
+				    <p:menuButton value="Options" icon="ui-icon ui-icon-carat-1-s">
+				        <p:menuitem value="Send Message" actionListener="#{friendBean.sendMsg}" ajax="false" icon="ui-icon ui-icon-pencil" />
+				        <p:menuitem value="Read Messages" actionListener="#{friendBean.readMsg}" ajax="false" icon="ui-icon ui-icon-mail-closed" />
+				        <p:menuitem value="Remove Friend" actionListener="#{friendBean.removeFriend}" ajax="false" icon="ui-icon ui-icon-trash" />				        
+				    </p:menuButton>
+				
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
 
 
 
