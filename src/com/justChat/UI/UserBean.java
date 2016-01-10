@@ -6,7 +6,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 
-
+/***
+ * 
+ * @author Mattias och PACKMASTER
+ *
+ */
 @SessionScoped
 @ManagedBean(name = "userBean")
 public class UserBean  implements Serializable{
