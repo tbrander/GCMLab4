@@ -1,10 +1,12 @@
 package com.justChat.UI;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;
@@ -28,11 +30,10 @@ public class UserBean  implements Serializable{
 
 	private String fullname;
 	private String mail;
+	
 	private String path = "http://130.237.84.211:8080/justchat/rest/";
 	
-	public UserBean(){
-		
-	}
+	public UserBean(){	}
 	
 	public String getMail() {
 		return mail;
@@ -54,7 +55,7 @@ public class UserBean  implements Serializable{
 	}
 
 	
-	public String login() {
+	public String login() { // Login + reg
 		  HashMap<String, String> user = new HashMap<String, String>();
 		  user.put("username", mail);
 		  user.put("regid", mail);
@@ -65,12 +66,29 @@ public class UserBean  implements Serializable{
 		  RestClient client = new RestClient();
 		  Resource resource = client.resource(path+"user/register");
 		  resource.contentType("application/json").accept("text/plain").post(String.class, json); // 200 OK
+		  FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("name", fullname);
+		  FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mail", mail);
 		  return "";
 		 }
+	
+	
+	public void friends() {
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect("friends.xhtml");
+		} catch (IOException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+	}
+	
+	public void home() {
 
-	public String getGmail() {
-		// TODO Auto-generated method stub
-		return mail;
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect("index.xhtml");
+		} catch (IOException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
 	}
 
 }
