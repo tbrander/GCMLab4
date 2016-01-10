@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+
+<h:head>
+	<meta name="google-signin-scope" content="profile email" />
+	<meta name="google-signin-client_id"
+		content="370652955246-imb7pam37uphid5i1j121s8ui9foicem.apps.googleusercontent.com" />
+	<script src="https://apis.google.com/js/platform.js" defer="defer" async="async"></script>
+
+	<h:outputScript>
+		function onSignIn(googleUser) {
+		  var profile = googleUser.getBasicProfile();
+		  document.getElementById('loginForm:fullname').value = profile.getName();
+		  document.getElementById('loginForm:mail').value = profile.getEmail();
+		  document.getElementById('loginForm:hdnBtn').click();
+		};
+		function afterSignIn(){
+		  window.location.href = "index.jsf";
+		}
+		
+	</h:outputScript>
+
+</h:head>
+
+<h:body>
+
+	<h1>
+		<div id="name"></div>
+	</h1>
+
+<h:form id="googleForm">
+
+    <p:panel id="basic" header="Login with google" footer="JustChat v.1.0" style="margin-bottom:20px">
+        <h:panelGrid columns="2" cellpadding="10">
+                <div class="g-signin2" align="center" data-onsuccess="onSignIn" data-theme="dark"/>
+        </h:panelGrid>
+    </p:panel>
+	
+</h:form>
+
+<h:form id="loginForm">
+	<h:inputHidden id="fullname" value="#{userBean.fullname}" />
+	<h:inputHidden id="mail" value="#{userBean.mail}" />
+	<p:commandButton id="hdnBtn" update="loginForm" oncomplete="afterSignIn()" style="display:none" />
+</h:form>
+
+
+</h:body>
+</html>
