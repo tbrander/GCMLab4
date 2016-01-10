@@ -47,7 +47,7 @@
 <h:form id="loginForm">
 	<h:inputHidden id="fullname" value="#{userBean.fullname}" />
 	<h:inputHidden id="mail" value="#{userBean.mail}" />
-	<p:commandButton id="hdnBtn" update="loginForm" oncomplete="afterSignIn()" style="display:none" />
+	<p:commandButton id="hdnBtn" update="loginForm" oncomplete="afterSignIn()" actionListener="#{userBean.login}" style="display:none" />
 </h:form>
 
 
