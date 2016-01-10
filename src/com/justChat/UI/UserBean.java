@@ -3,14 +3,11 @@ package com.justChat.UI;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-
 import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;
-
 import com.google.gson.Gson;
 
 
@@ -75,7 +72,7 @@ public class UserBean  implements Serializable{
 	public void friends() {
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("friends.xhtml");
+					.redirect("friends.jsf");
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
@@ -85,7 +82,7 @@ public class UserBean  implements Serializable{
 
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("index.xhtml");
+					.redirect("index.jsf");
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}

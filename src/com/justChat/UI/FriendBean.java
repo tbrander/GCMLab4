@@ -4,28 +4,17 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-
-
-
-
-
-
-
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
 import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;
-
 import com.google.gson.Gson;
 
 
 
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "friendBean")
 public class FriendBean implements Serializable{
 
@@ -46,13 +35,13 @@ public class FriendBean implements Serializable{
 
 	
 	public FriendBean(){
-	//	fullname = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("name");
-	//	mail = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("mail");
+		fullname = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("name");
+		mail = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("mail");
 	}
 
 	
 	public String getMail() {
-		return this.userBean.getMail();
+		return mail;
 	}
 
 
