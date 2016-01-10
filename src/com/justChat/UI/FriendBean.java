@@ -35,13 +35,12 @@ public class FriendBean implements Serializable{
 
 	
 	public FriendBean(){
-		fullname = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("name");
-		mail = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("mail");
+		
 	}
 
 	
 	public String getMail() {
-		return mail;
+		return userBean.getMail();
 	}
 
 
