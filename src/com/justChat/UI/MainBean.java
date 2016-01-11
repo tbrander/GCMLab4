@@ -32,34 +32,11 @@ public class MainBean implements Serializable {
 	}
 
 
-	public void home() {
-
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("index.jsf");
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-	}
-	
-	public void friends() {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("friends.jsf");
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-	}
 
 
-	public void chat() {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("chat.xhtml");
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-	}
+
+
+
 
 
 	/*

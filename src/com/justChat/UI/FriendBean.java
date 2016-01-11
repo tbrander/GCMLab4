@@ -1,15 +1,15 @@
 package com.justChat.UI;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.wink.client.Resource;
@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 
 
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "friendBean")
 public class FriendBean implements Serializable{
 
@@ -28,8 +28,7 @@ public class FriendBean implements Serializable{
 	
 	
 	private String path = "http://130.237.84.211:8080/justchat/rest/";
-	@SuppressWarnings("unused")
-	private String fullname, mail, friendMail;
+	private String fullname, mail, friendMail="";
 	private List<String> friendList;
 	
 	@ManagedProperty(value = "#{userBean}")
@@ -56,7 +55,7 @@ public class FriendBean implements Serializable{
 	}
 
 	public String getMail() {
-		return userBean.getMail();
+		return mail;
 	}
 
 
@@ -66,7 +65,7 @@ public class FriendBean implements Serializable{
 
 
 	public String getFullname() {
-		return userBean.getFullname();
+		return fullname;
 	}
 
 
@@ -88,28 +87,7 @@ public class FriendBean implements Serializable{
 		this.friendList = friendList;
 	}
 	
-	// *********** REDIRECT ************ //
-	
-	public void home() {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("index.jsf");
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-	}
-	
-	public void messages() {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("messages.jsf");
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-	}
-	
-	
-	
+
 	// *********** METHODS ************* //
 	
 	
@@ -118,6 +96,14 @@ public class FriendBean implements Serializable{
 	}
 	
 	public String addFriend() {
+		if(friendMail.equals("")){
+			FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Specify gmail address!","Specify gmail address!"));
+		}else if(friendMail.contains("@gmail.com")){
+			FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Not a valid gmail address!","Not a valid gmail address!"));
+		}else{
+			friendMail=friendMail.concat("@gmail.com");
 		Map<String, String> friend = new HashMap<String, String>();
 		friend.put("user", userBean.getMail()); 
 		friend.put("friend", friendMail);
@@ -126,7 +112,11 @@ public class FriendBean implements Serializable{
 		RestClient client = new RestClient();
 		Resource resource = client.resource(path + "friend/addfriend");
 		resource.contentType("application/json").accept("text/plain").post(String.class, json);
-		return "profile.xhtml?faces-redirect=true" + "&user=";// + paramUser;
+		FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful! Added: "+friendMail,null));
+		friendMail="";
+	}
+		return "";// + paramUser;
 	}
 	
 	public void sendMsg(){

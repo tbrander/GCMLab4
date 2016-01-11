@@ -1,15 +1,12 @@
 package com.justChat.UI;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;
 import com.google.gson.Gson;
-
 
 /***
  * 
@@ -63,29 +60,7 @@ public class UserBean  implements Serializable{
 		  RestClient client = new RestClient();
 		  Resource resource = client.resource(path+"user/register");
 		  resource.contentType("application/json").accept("text/plain").post(String.class, json); // 200 OK
-		  FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("name", fullname);
-		  FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mail", mail);
 		  return "";
 		 }
-	
-	
-	public void friends() {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("friends.jsf");
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-	}
-	
-	public void home() {
-
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("index.jsf");
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-	}
 
 }
