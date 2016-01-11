@@ -16,32 +16,38 @@ import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;
 
 import com.google.gson.Gson;
-
-
+import com.justChat.BO.MailService;
 
 @SessionScoped
 @ManagedBean(name = "friendBean")
-public class FriendBean implements Serializable{
+public class FriendBean implements Serializable {
 
-	
 	private static final long serialVersionUID = -7271766193819041752L;
-	
-	
+
 	private String path = "http://130.237.84.211:8080/justchat/rest/";
-	private String fullname, mail, friendMail="";
+	private String fullname, mail, friendMail = "";
 	private List<String> friendList;
-	
+	private boolean includeMail = false;
+
 	@ManagedProperty(value = "#{userBean}")
 	private UserBean userBean;
-	
-	
-	public FriendBean(){
+
+	public FriendBean() {
 		friendList = new ArrayList<>();
 	}
-	
+
 	// ************* GETTERS / SETTERS ************** //
-	
-	
+
+
+
+	public boolean isIncludeMail() {
+		return includeMail;
+	}
+
+	public void setIncludeMail(boolean includeMail) {
+		this.includeMail = includeMail;
+	}
+
 	public String getFriendMail() {
 		return friendMail;
 	}
@@ -58,76 +64,86 @@ public class FriendBean implements Serializable{
 		return mail;
 	}
 
-
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-
 
 	public String getFullname() {
 		return fullname;
 	}
 
-
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<String> getFriendList() {
 		RestClient client = new RestClient();
-		Resource res = client.resource(path + "friend/friendlist?user=" + userBean.getMail());
+		Resource res = client.resource(path + "friend/friendlist?user="
+				+ userBean.getMail());
 		String jsonFriends = res.accept("application/json").get(String.class);
 		Gson gson = new Gson();
 		friendList = gson.fromJson(jsonFriends, ArrayList.class);
 		return friendList;
 	}
-	
+
 	public void setFriendList(List<String> friendList) {
 		this.friendList = friendList;
 	}
-	
 
 	// *********** METHODS ************* //
-	
-	
-	public void addFriendX(){
+
+	public void addFriendX() {
 		// tillfällig metod, den under ska användas sen.
 	}
-	
-	public String addFriend() {
-		if(friendMail.equals("")){
-			FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Specify gmail address!","Specify gmail address!"));
-		}else if(friendMail.contains("@gmail.com")){
-			FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Not a valid gmail address!","Not a valid gmail address!"));
-		}else{
-			friendMail=friendMail.concat("@gmail.com");
-		Map<String, String> friend = new HashMap<String, String>();
-		friend.put("user", userBean.getMail()); 
-		friend.put("friend", friendMail);
-		Gson gson = new Gson();
-		String json = gson.toJson(friend);
-		RestClient client = new RestClient();
-		Resource resource = client.resource(path + "friend/addfriend");
-		resource.contentType("application/json").accept("text/plain").post(String.class, json);
-		FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful! Added: "+friendMail,null));
-		friendMail="";
+
+	public void addFriend() {
+		if (friendMail.equals("")) {
+			FacesContext.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(FacesMessage.SEVERITY_FATAL,
+									"Specify gmail address!",
+									"Specify gmail address!"));
+		} else if (friendMail.contains("@gmail.com")) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Not a valid gmail address!",
+							"Not a valid gmail address!"));
+		} else {
+			friendMail = friendMail.concat("@gmail.com");
+			Map<String, String> friend = new HashMap<String, String>();
+			friend.put("user", userBean.getMail());
+			friend.put("friend", friendMail);
+			Gson gson = new Gson();
+			String json = gson.toJson(friend);
+			RestClient client = new RestClient();
+			Resource resource = client.resource(path + "friend/addfriend");
+			resource.contentType("application/json").accept("text/plain")
+					.post(String.class, json);
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage("Successful! Added: "
+					+ friendMail, null));
+			if (includeMail) {
+				MailService.sendMail(userBean.getMail(), friendMail,
+						"JustChat - You have a new friend!",
+						userBean.getFullname() + " has added you as a friend.\nVisit the JustChat forum at 1-dot-amazing-craft-117312.appspot.com");
+			}
+			friendMail = "";
+			includeMail=false;
+		}
 	}
-		return "";// + paramUser;
+
+	public void sendMsg() {
+
 	}
-	
-	public void sendMsg(){
-		
+
+	public void readMsg() {
+
 	}
-	
-	public void readMsg(){
-		
-	}
-	
-	public void removeFriend(){
-		
+
+	public void removeFriend() {
+
 	}
 }

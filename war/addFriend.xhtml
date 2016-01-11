@@ -13,6 +13,11 @@
 </h:head>
 
 <body>
+<style>
+body {
+    background-color: rgb(208,227,236);
+}
+</style>
 <p:toolbar>
  <f:facet name="right">
    		<h:form>
@@ -35,8 +40,11 @@
 		        <h:outputLabel for="specmail" value="Specify gmail address: " />
 		        <p:inputText id="specmail" value="#{friendBean.friendMail}" required="true" label="specify gmail" /> <h:outputLabel value="@gmail.com" />
 		       
-		        <p:commandButton value="Add" action="#{friendBean.addFriend}" update="growl" ajax="false" icon="ui-icon ui-icon-plusthick" style="margin-right:20px;" />
+		       	<p:commandButton value="Add" action="#{friendBean.addFriend}" update="growl" ajax="false" icon="ui-icon ui-icon-plusthick" style="margin-right:20px;" />
+		       	
 	        </h:panelGrid>
+	        <br></br>
+	        <p:selectBooleanCheckbox id="sendmail" value="#{friendBean.includeMail}" /> <h:outputLabel value="Include mail notification" align="right"/>
 		</p:panel>
 	</h:form>
 
