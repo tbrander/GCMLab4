@@ -95,9 +95,6 @@ public class FriendBean implements Serializable {
 
 	// *********** METHODS ************* //
 
-	public void addFriendX() {
-		// tillfällig metod, den under ska användas sen.
-	}
 
 	public void addFriend() {
 		if (friendMail.equals("")) {
@@ -137,23 +134,4 @@ public class FriendBean implements Serializable {
 		}
 	}
 
-
-
-	public void removeFriend() {
-
-		Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-		String receiver = params.get("remove");
-		
-		// anrop till db om att ta bort receiver.-->
-		
-		// ta bort från friendList också. (Kanske inte behövs, testa.)
-		int index=0;
-		for(String r:friendList){
-			if(r.equals(receiver)){
-				friendList.remove(index);
-				break;
-			}
-			++index;
-		}
-	}
 }

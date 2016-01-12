@@ -55,7 +55,7 @@ public class NavigationBean implements Serializable{
 	public void sendMsg() {
 		try {
 			Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-			String receiver = params.get("action");
+			String receiver = params.get("sendmsg");
 			
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("receiver", receiver);
 			FacesContext.getCurrentInstance().getExternalContext()
@@ -68,6 +68,9 @@ public class NavigationBean implements Serializable{
 	public void readMsg() {
 
 		try {
+			Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			String sender = params.get("readmsg");
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("sender", sender);
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect("readmessage.jsf");
 		} catch (IOException e) {

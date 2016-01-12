@@ -81,6 +81,8 @@ public class MessageBean implements Serializable{
 		msgList.add(new Message("Lelle@gmail.com","me","Tjena! testing testing..","20:43"));
 		msgList.add(new Message("Pelle@gmail.com","me","bllalalala..","14:29"));
 	}
+	
+	
 	public void sendMsg(){
 		if(body.equals("")){
 			FacesContext.getCurrentInstance()
