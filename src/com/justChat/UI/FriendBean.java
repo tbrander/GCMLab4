@@ -102,7 +102,7 @@ public class FriendBean implements Serializable {
 							new FacesMessage(FacesMessage.SEVERITY_FATAL,
 									"Specify gmail address!",
 									"Specify gmail address!"));
-		} else if (friendMail.contains("@gmail.com")) {
+		} else if (friendMail.contains("@")) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,

@@ -31,7 +31,7 @@ public class MessageBean implements Serializable{
 
 	private static final long serialVersionUID = 3055904185644491458L;
 	private List<Message> msgList= new ArrayList<>();
-	private String receiver="", body="";
+	private String receiver="", body="", sender="";
 	private boolean includeMail=false;
 	private String path = "http://130.237.84.211:8080/justchat/rest/";
 	
@@ -45,6 +45,14 @@ public class MessageBean implements Serializable{
 		
 	}
 	
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+
 	public boolean isIncludeMail() {
 		return includeMail;
 	}
@@ -54,6 +62,7 @@ public class MessageBean implements Serializable{
 	}
 
 	public String getReceiver() {
+		receiver = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sendTo");
 		return receiver;
 	}
 
@@ -77,14 +86,16 @@ public class MessageBean implements Serializable{
 	public void setUserBean(UserBean userBean) {
 		this.userBean = userBean;
 	}
+
 	
+	@SuppressWarnings("unchecked")
 	public List<Message> getMsgList() {
-		receiver = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sender");
+		sender = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("receiveFrom");
 		
 		Gson gson = new Gson();
 		RestClient client = new RestClient();
-		Resource resource = client.resource(path+"message/history?sender="+userBean.getMail()+"&receiver="+receiver);
-		String jsonMsg=resource.get(String.class); // 200 OK
+		Resource resource = client.resource(path+"message/history?sender=ramsaw94@gmail.com&receiver="+userBean.getMail());
+		String jsonMsg=resource.get(String.class);
 		msgList= gson.fromJson(jsonMsg, ArrayList.class);
 		
 		return msgList;
@@ -105,21 +116,21 @@ public class MessageBean implements Serializable{
 							"The message has no content!"));
 		}else{
 			
-			Message newMsg = new Message(userBean.getMail(),receiver,body, formatTime(Calendar.getInstance().getTimeInMillis()));
+			Map<String, String> newMessage = new HashMap<String, String>();
+			newMessage.put("sender", userBean.getMail());
+			newMessage.put("receiver", receiver);
+			newMessage.put("body", body);
 			
 			Gson gson = new Gson();
-			String json = gson.toJson(createMsg(newMsg));
-		/*	RestClient client = new RestClient();
-			Resource resource = client.resource(path+"message/history?sender="+userBean.getMail()+"&receiver="+receiver);
-			resource.contentType("application/json").accept("text/plain").post(String.class, json); // 200 OK*/
-			
+			String json = gson.toJson(newMessage);
+			RestClient client = new RestClient();
+			Resource resource = client.resource(path + "message/sendmessage");
+			resource.contentType("application/json").accept("text/plain").post(String.class, json);
 			
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage("Message sent to: "	+ receiver +" from: "+userBean.getMail(), null));
-			context.addMessage(null, new FacesMessage(newMsg.getTimestamp()+" - " + "Message: "+body, null));
-			
-			//  anrop till db -->
-			
+			context.addMessage(null, new FacesMessage("Sent to: "	+ receiver, null));
+			context.addMessage(null, new FacesMessage("Message: "+body, null));
+
 			if (includeMail) {
 				MailService.sendMail(userBean.getFullname(),userBean.getMail(), receiver,
 						"JustChat - You've got mail from "+ userBean.getFullname() + ".",body+"\n\n\nVisit the JustChat forum at http://1-dot-amazing-craft-117312.appspot.com");
@@ -137,7 +148,7 @@ public class MessageBean implements Serializable{
     private static String dateFormater(String date) {
         Date d = new Date();
         
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"), sqf = new SimpleDateFormat("yyyy-mm-dd HH:mm:SSSS");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"), sqf = new SimpleDateFormat("yyyy-mm-dd HH:mm");
         try {
             d = sqf.parse(date);
         } catch (ParseException e) {
@@ -150,14 +161,14 @@ public class MessageBean implements Serializable{
     	body="";
     }
     
-    
-    private Map<String, String> createMsg(Message message){
+    private String createMsg(Message message){
             Map<String, String> msgMap = new HashMap<>();
             msgMap.put("sender", message.getSender());
             msgMap.put("receiver", message.getReceiver());
             msgMap.put("body", message.getBody());
             msgMap.put("timestamp", message.getTimestamp());
-            
-            return msgMap;
+            Gson gson = new Gson();
+            String json = gson.toJson(msgMap);
+            return json;
     }
 }
