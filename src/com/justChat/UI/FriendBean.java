@@ -39,8 +39,6 @@ public class FriendBean implements Serializable {
 
 	// ************* GETTERS / SETTERS ************** //
 
-
-
 	public boolean isIncludeMail() {
 		return includeMail;
 	}

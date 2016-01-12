@@ -22,6 +22,7 @@ import org.apache.wink.client.RestClient;
 
 import com.google.gson.Gson;
 import com.justChat.BO.MailService;
+import com.justChat.BO.Message;
 
 
 @SessionScoped
@@ -93,18 +94,6 @@ public class MessageBean implements Serializable{
 		this.msgList = msgList;
 	}
 	
-	/*@SuppressWarnings("unchecked")
-	private void getMessages(){
-		// Testmetod.
-		
-		Gson gson = new Gson();
-		RestClient client = new RestClient();
-		Resource resource = client.resource(path+"message/history?sender="+"brandertb@gmail.com"+"&receiver=ramsaw94@gmail.com");
-		String jsonMsg=resource.contentType("application/json").accept("text/plain").get(String.class); // 200 OK
-		msgList= gson.fromJson(jsonMsg, ArrayList.class);
-	}*/
-	
-
 	
 	public void sendMsg(){
 		if(body.equals("")){

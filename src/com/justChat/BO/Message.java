@@ -1,4 +1,4 @@
-package com.justChat.UI;
+package com.justChat.BO;
 
 import java.io.Serializable;
 

@@ -47,7 +47,9 @@ body {
 					<f:facet name="header"></f:facet>
 				
 				    <p:menuButton value="Options" icon="ui-icon ui-icon-carat-1-s">
-				    	<p:menuitem value="Chat" action="#{navigationBean.chat}" ajax="false" icon="ui-icon ui-icon-comment" />
+				    	<p:menuitem value="Chat" action="#{navigationBean.chat}" ajax="false" icon="ui-icon ui-icon-comment">
+				    	<f:param name="chat" value="#{friend}" />
+				        	</p:menuitem>
 				        <p:menuitem value="Send Message" action="#{navigationBean.sendMsg}" ajax="false" icon="ui-icon ui-icon-pencil" >
 				        	<f:param name="sendmsg" value="#{friend}" />
 				        </p:menuitem>

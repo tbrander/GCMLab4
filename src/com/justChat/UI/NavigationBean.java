@@ -45,6 +45,10 @@ public class NavigationBean implements Serializable{
 	
 	public void chat() {
 		try {
+			Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			String partner = params.get("chat");
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("partner", partner);
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect("chat.jsf");
 		} catch (IOException e) {
@@ -71,8 +75,7 @@ public class NavigationBean implements Serializable{
 			Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 			String sender = params.get("readmsg");
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("sender", sender);
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("readmessage.jsf");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("readmessage.jsf");
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
