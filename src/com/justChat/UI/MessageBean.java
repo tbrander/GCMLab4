@@ -1,21 +1,30 @@
 package com.justChat.UI;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.wink.client.Resource;
+import org.apache.wink.client.RestClient;
+
+import com.google.gson.Gson;
 import com.justChat.BO.MailService;
 
 
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "messageBean")
 public class MessageBean implements Serializable{
 
@@ -23,6 +32,8 @@ public class MessageBean implements Serializable{
 	private List<Message> msgList= new ArrayList<>();
 	private String receiver="", body="";
 	private boolean includeMail=false;
+	private String path = "http://130.237.84.211:8080/justchat/rest/";
+	
 	
 	@ManagedProperty(value = "#{userBean}")
 	private UserBean userBean;
@@ -30,8 +41,7 @@ public class MessageBean implements Serializable{
 	
 	
 	public MessageBean(){
-		receiver = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("receiver");
-		getMessages();
+		
 	}
 	
 	public boolean isIncludeMail() {
@@ -68,7 +78,14 @@ public class MessageBean implements Serializable{
 	}
 	
 	public List<Message> getMsgList() {
-		// gör db anrop
+		receiver = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sender");
+		
+		Gson gson = new Gson();
+		RestClient client = new RestClient();
+		Resource resource = client.resource(path+"message/history?sender="+userBean.getMail()+"&receiver="+receiver);
+		String jsonMsg=resource.get(String.class); // 200 OK
+		msgList= gson.fromJson(jsonMsg, ArrayList.class);
+		
 		return msgList;
 	}
 
@@ -76,12 +93,18 @@ public class MessageBean implements Serializable{
 		this.msgList = msgList;
 	}
 	
+	/*@SuppressWarnings("unchecked")
 	private void getMessages(){
 		// Testmetod.
-		msgList.add(new Message("Lelle@gmail.com","me","Tjena! testing testing..","20:43"));
-		msgList.add(new Message("Pelle@gmail.com","me","bllalalala..","14:29"));
-	}
+		
+		Gson gson = new Gson();
+		RestClient client = new RestClient();
+		Resource resource = client.resource(path+"message/history?sender="+"brandertb@gmail.com"+"&receiver=ramsaw94@gmail.com");
+		String jsonMsg=resource.contentType("application/json").accept("text/plain").get(String.class); // 200 OK
+		msgList= gson.fromJson(jsonMsg, ArrayList.class);
+	}*/
 	
+
 	
 	public void sendMsg(){
 		if(body.equals("")){
@@ -94,6 +117,14 @@ public class MessageBean implements Serializable{
 		}else{
 			
 			Message newMsg = new Message(userBean.getMail(),receiver,body, formatTime(Calendar.getInstance().getTimeInMillis()));
+			
+			Gson gson = new Gson();
+			String json = gson.toJson(createMsg(newMsg));
+		/*	RestClient client = new RestClient();
+			Resource resource = client.resource(path+"message/history?sender="+userBean.getMail()+"&receiver="+receiver);
+			resource.contentType("application/json").accept("text/plain").post(String.class, json); // 200 OK*/
+			
+			
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage("Message sent to: "	+ receiver +" from: "+userBean.getMail(), null));
 			context.addMessage(null, new FacesMessage(newMsg.getTimestamp()+" - " + "Message: "+body, null));
@@ -114,7 +145,30 @@ public class MessageBean implements Serializable{
         return sdf.format(time);
     }
     
+    private static String dateFormater(String date) {
+        Date d = new Date();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"), sqf = new SimpleDateFormat("yyyy-mm-dd HH:mm:SSSS");
+        try {
+            d = sqf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sdf.format(d);
+    }
+    
     public void resetBody(){
     	body="";
+    }
+    
+    
+    private Map<String, String> createMsg(Message message){
+            Map<String, String> msgMap = new HashMap<>();
+            msgMap.put("sender", message.getSender());
+            msgMap.put("receiver", message.getReceiver());
+            msgMap.put("body", message.getBody());
+            msgMap.put("timestamp", message.getTimestamp());
+            
+            return msgMap;
     }
 }

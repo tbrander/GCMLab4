@@ -9,6 +9,7 @@ public class Message implements Serializable{
     private String receiver;
     private String body;
     private String timestamp;
+    private int id;
 
     public Message() {
     }
@@ -18,6 +19,14 @@ public class Message implements Serializable{
 		this.receiver = receiver;
 		this.body = body;
 		this.timestamp = timestamp;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getSender() {
