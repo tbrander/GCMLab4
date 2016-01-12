@@ -22,6 +22,7 @@ body {
  <f:facet name="right">
    		<h:form>
    			<p:commandButton value="Friends" action="#{navigationBean.friends}"	ajax="false" icon="ui-icon ui-icon-person" style="margin-right:20px;" />
+    		<p:commandButton value="Messages" action="#{navigationBean.readMsg}" ajax="false" icon="ui-icon ui-icon-mail-closed" style="margin-right:20px;" />
     	</h:form>
  </f:facet>
  
@@ -38,13 +39,13 @@ body {
 			<h:panelGrid columns="3" columnClasses="column" cellpadding="5">
         
 		        <h:outputLabel for="specmail" value="Specify gmail address: " />
-		        <p:inputText id="specmail" value="#{friendBean.friendMail}" required="true" label="specify gmail" /> <h:outputLabel value="@gmail.com" />
+		        <p:inputText id="specmail" value="#{friendBean.friendMail}" required="false" label="specify gmail" /> <h:outputLabel value="@gmail.com" />
 		       
 		       	<p:commandButton value="Add" action="#{friendBean.addFriend}" update="growl" ajax="false" icon="ui-icon ui-icon-plusthick" style="margin-right:20px;" />
 		       	
 	        </h:panelGrid>
 	        <br></br>
-	        <p:selectBooleanCheckbox id="sendmail" value="#{friendBean.includeMail}" /> <h:outputLabel value="Include mail notification" align="right"/>
+	        <p:selectBooleanCheckbox id="sendmail" value="#{friendBean.includeMail}" /> <h:outputLabel value="Send mail notification to this address" align="right"/>
 		</p:panel>
 	</h:form>
 

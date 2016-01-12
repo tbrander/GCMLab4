@@ -26,14 +26,15 @@ public class FriendBean implements Serializable {
 
 	private String path = "http://130.237.84.211:8080/justchat/rest/";
 	private String fullname, mail, friendMail = "";
-	private List<String> friendList;
+	private List<String> friendList= new ArrayList<>();
+	
 	private boolean includeMail = false;
 
 	@ManagedProperty(value = "#{userBean}")
 	private UserBean userBean;
 
 	public FriendBean() {
-		friendList = new ArrayList<>();
+		
 	}
 
 	// ************* GETTERS / SETTERS ************** //
@@ -84,6 +85,7 @@ public class FriendBean implements Serializable {
 		String jsonFriends = res.accept("application/json").get(String.class);
 		Gson gson = new Gson();
 		friendList = gson.fromJson(jsonFriends, ArrayList.class);
+	
 		return friendList;
 	}
 
@@ -126,7 +128,7 @@ public class FriendBean implements Serializable {
 			context.addMessage(null, new FacesMessage("Successful! Added: "
 					+ friendMail, null));
 			if (includeMail) {
-				MailService.sendMail(userBean.getMail(), friendMail,
+				MailService.sendMail(userBean.getFullname(),userBean.getMail(), friendMail,
 						"JustChat - You have a new friend!",
 						userBean.getFullname() + " has added you as a friend.\nVisit the JustChat forum at 1-dot-amazing-craft-117312.appspot.com");
 			}
@@ -135,15 +137,23 @@ public class FriendBean implements Serializable {
 		}
 	}
 
-	public void sendMsg() {
 
-	}
-
-	public void readMsg() {
-
-	}
 
 	public void removeFriend() {
 
+		Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String receiver = params.get("remove");
+		
+		// anrop till db om att ta bort receiver.-->
+		
+		// ta bort från friendList också. (Kanske inte behövs, testa.)
+		int index=0;
+		for(String r:friendList){
+			if(r.equals(receiver)){
+				friendList.remove(index);
+				break;
+			}
+			++index;
+		}
 	}
 }

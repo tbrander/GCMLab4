@@ -10,25 +10,16 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="google-signin-client_id" content="370652955246-imb7pam37uphid5i1j121s8ui9foicem.apps.googleusercontent.com" />
 <script src="https://apis.google.com/js/platform.js" async="async" defer="defer"></script>
-    <h:outputScript>
-  		function signOut() {
-	    	var auth2 = gapi.auth2.getAuthInstance();
-	   		auth2.signOut().then(function () {
-	      		console.log('User signed out.');
-	    	});
-  		}
-	</h:outputScript>
-
 </h:head>
 
 <body>
-
 <style>
 body {
     background-color: rgb(208,227,236);
 }
 </style>
 <p:toolbar>
+
  <f:facet name="right">
    		<h:form>
    			<p:commandButton value="Friends" action="#{navigationBean.friends}"	ajax="false" icon="ui-icon ui-icon-person" style="margin-right:20px;" />
@@ -36,15 +27,21 @@ body {
     		<p:commandButton value="Messages" action="#{navigationBean.readMsg}" ajax="false" icon="ui-icon ui-icon-mail-closed" style="margin-right:20px;" />
     	</h:form>
  </f:facet>
-
+ <f:facet name="left">
+   		<h:form>
+	        <p:commandButton value="Home" action="#{navigationBean.home}" ajax="false" icon="ui-icon ui-icon-home" style="margin-right:20px;" />
+    		
+    	</h:form>
+ </f:facet>
 </p:toolbar>
 
-
- <p:panel id="basic" header="Welcome #{userBean.fullname}" footer="JustChat v.1.0" style="margin-bottom:20px">
-        <h:panelGrid columns="2" cellpadding="10">
-                <h:outputLabel>Mail: #{userBean.mail}</h:outputLabel>
-        </h:panelGrid>
- </p:panel>
+	<h:form>
+		<p:panel header="Chat">
+		
+		under construction..
+			
+		</p:panel>
+	</h:form>
 
 
 

@@ -36,17 +36,33 @@ body {
     		<p:commandButton value="Messages" action="#{navigationBean.readMsg}" ajax="false" icon="ui-icon ui-icon-mail-closed" style="margin-right:20px;" />
     	</h:form>
  </f:facet>
-
+ 
+ <f:facet name="left">
+   		<h:form>
+	        <p:commandButton value="Home" action="#{navigationBean.home}" ajax="false" icon="ui-icon ui-icon-home" style="margin-right:20px;" />
+    	</h:form>
+ </f:facet>
 </p:toolbar>
 
-
- <p:panel id="basic" header="Welcome #{userBean.fullname}" footer="JustChat v.1.0" style="margin-bottom:20px">
-        <h:panelGrid columns="2" cellpadding="10">
-                <h:outputLabel>Mail: #{userBean.mail}</h:outputLabel>
-        </h:panelGrid>
- </p:panel>
-
-
+	<h:form>
+		<p:growl id="growl" life="5000" />
+		<p:panel header="Send a new message to #{messageBean.receiver}">
+			<h:panelGrid columns="2" columnClasses="column" cellpadding="5" style="text-align:center;">
+        
+		        <h:outputLabel for="specmsg" value="Message: "/>
+		        <p:inputTextarea id="specmsg" value="#{messageBean.body}" required="false" label="New message" />
+		        
+		       	
+		       	<p:commandButton value="Send message" action="#{messageBean.sendMsg}" update="growl" ajax="false" icon="ui-icon ui-icon-transferthick-e-w" style="margin-right:20px;" />
+		       	<p:commandButton value="reset" action="#{messageBean.resetBody}" ajax="false" icon="ui-icon ui-icon-circle-close" style="margin-right:20px;" />
+	        
+	        </h:panelGrid>
+	        
+	        <br></br>
+	        <p:selectBooleanCheckbox id="sendmail" value="#{messageBean.includeMail}" />
+		    <h:outputLabel value="Send a copy by mail to this address" align="right"/>
+		</p:panel>
+	</h:form>
 
 </body>
 

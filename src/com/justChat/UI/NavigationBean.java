@@ -2,6 +2,7 @@ package com.justChat.UI;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -19,15 +20,6 @@ public class NavigationBean implements Serializable{
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect("index.jsf");
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-	}
-	
-	public void messages() {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("messages.jsf");
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
@@ -54,7 +46,30 @@ public class NavigationBean implements Serializable{
 	public void chat() {
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("chat.xhtml");
+					.redirect("chat.jsf");
+		} catch (IOException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+	}
+	
+	public void sendMsg() {
+		try {
+			Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			String receiver = params.get("action");
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("receiver", receiver);
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect("sendmessage.jsf");
+		} catch (IOException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+	}
+
+	public void readMsg() {
+
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect("readmessage.jsf");
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
