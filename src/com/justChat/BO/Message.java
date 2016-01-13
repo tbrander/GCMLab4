@@ -14,11 +14,12 @@ public class Message implements Serializable{
     public Message() {
     }
     
-    public Message(String sender, String receiver, String body, String timestamp) {
+    public Message(int id, String sender, String receiver, String body, String timestamp) {
 		this.sender = sender;
 		this.receiver = receiver;
 		this.body = body;
 		this.timestamp = timestamp;
+		this.id = id;
 	}
 
 	public int getId() {

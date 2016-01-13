@@ -8,13 +8,6 @@ import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;
 import com.google.gson.Gson;
 
-/***
- * 
- * @author Mattias och Thomas
- *
- */
-
-
 @SessionScoped
 @ManagedBean(name = "userBean")
 public class UserBean  implements Serializable{

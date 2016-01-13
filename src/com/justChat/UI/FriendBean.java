@@ -26,7 +26,7 @@ public class FriendBean implements Serializable {
 
 	private String path = "http://130.237.84.211:8080/justchat/rest/";
 	private String fullname, mail, friendMail = "";
-	private List<String> friendList= new ArrayList<>();
+	private Map<String,String>friendList = new HashMap<>();
 	
 	private boolean includeMail = false;
 
@@ -38,6 +38,17 @@ public class FriendBean implements Serializable {
 	}
 
 	// ************* GETTERS / SETTERS ************** //
+
+	public void setFriendList(Map<String, String> friendList) {
+		this.friendList = friendList;
+	}
+
+	public Map<String,String> getFriendMap() {
+		
+		return friendList;
+	}
+
+
 
 	public boolean isIncludeMail() {
 		return includeMail;
@@ -82,14 +93,24 @@ public class FriendBean implements Serializable {
 				+ userBean.getMail());
 		String jsonFriends = res.accept("application/json").get(String.class);
 		Gson gson = new Gson();
-		friendList = gson.fromJson(jsonFriends, ArrayList.class);
-	
-		return friendList;
+		List<String> friendFrDB = new ArrayList<>();
+		friendFrDB = gson.fromJson(jsonFriends, ArrayList.class);
+		if(friendFrDB == null){
+			return new ArrayList<String>();
+		}
+		
+		splitMailAddress(friendFrDB);
+		List<String> list = new ArrayList<String>(friendList.keySet());
+		return list;
 	}
 
-	public void setFriendList(List<String> friendList) {
-		this.friendList = friendList;
+	private void splitMailAddress(List<String> friendFrDB) {
+		
+		  for (String s : friendFrDB) {
+			  friendList.put((s.split("@"))[0],s);
+		  }
 	}
+
 
 	// *********** METHODS ************* //
 

@@ -22,6 +22,7 @@ body {
     position: absolute;
     right: 0px;
     padding: 10px;
+    color: #2b9cc5;
 }
 </style>
 <p:toolbar>
@@ -41,15 +42,44 @@ body {
 </p:toolbar>
 
 
-	<h:form>
-		<p:panel header="in chat with #{chatBean.partner}">
-				under construction..
-		</p:panel>
-	</h:form>
+<div>
+		
+		<h:form>
+		<p:growl id="growl" life="5000" />
+   		 <p:poll interval="3" listener="#{chatBean.fetchNewMessages}" update="dataTabMsgIn" />
+			<p:panel header="Chat with #{chatBean.partnerAddress}">
+					  
+					<p:dataTable id="dataTabMsgIn" value="#{chatBean.chatMsgList}" var="messages"  border="1" cellspacing="5" width="700" style=" border: 2px solid rgb(129,186,233); background-color: rgb(237,237,237);text-align:left;">
+						<p:column>
+							<f:facet name="header"></f:facet>    				
+		     				#{messages.timestamp} - #{messages.sender} wrote:  
+		   				</p:column>
+		   				<p:column>
+							<f:facet name="header"></f:facet>    				
+		     				#{messages.body}
+		   				</p:column>
+					</p:dataTable>
+					
+					<br></br>
+					<br></br>
+					<p:inputTextarea id="output" rows="3" cols="119" counter="display" maxlength="300" counterTemplate="{0} characters remaining." autoResize="false" value="#{chatBean.body}"/>
+    				<h:outputText id="display" />
+    				<br></br>
+    				<br></br>
+    				<p:commandButton id="btn" value="Send" update="growl" actionListener="#{chatBean.sendMsg}"/>
+			</p:panel>
+		</h:form>
+	</div>
 
 <div class="anim">
+
+Download JustChat for Android:
+<a href="downloads/justChatApp.apk">
 	<img src="img/justChat.gif" alt="JustChat"/>
+</a>
 </div>
+
+
 
 </body>
 
