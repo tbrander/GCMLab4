@@ -94,7 +94,7 @@ public class MessageBean implements Serializable{
 		
 		Gson gson = new Gson();
 		RestClient client = new RestClient();
-		Resource resource = client.resource(path+"message/history?sender=ramsaw94@gmail.com&receiver="+userBean.getMail());
+		Resource resource = client.resource(path+"message/history?sender="+sender+"&receiver="+userBean.getMail());
 		String jsonMsg=resource.get(String.class);
 		msgList= gson.fromJson(jsonMsg, ArrayList.class);
 		
